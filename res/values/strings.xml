@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VirtualCompanionHelper</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <!-- Strings for Layout reason -->
+    <string name="tab_map">Karte</string>
+    <string name="tab_video">Video</string>
+    <string name="tab_x">x</string>
+
+</resources>

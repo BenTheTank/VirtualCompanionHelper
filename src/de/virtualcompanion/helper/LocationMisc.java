@@ -16,6 +16,7 @@ public class LocationMisc implements LocationListener, ConnectionCallbacks,
 	
 	public LocationClient locationclient;
 	public Location location;
+	public boolean hasLocation = false;
 	
 	LocationMisc(Context context)	{
 		locationclient = new LocationClient(context, this, this);
@@ -23,11 +24,11 @@ public class LocationMisc implements LocationListener, ConnectionCallbacks,
 	
 	@Override
 	public void onConnected(Bundle arg0) {
-		// TODO Auto-generated method stub
 		LocationRequest request = LocationRequest.create();
 		request.setNumUpdates(1);
 		locationclient.requestLocationUpdates(request, (LocationListener) this);
 		location = locationclient.getLastLocation();
+		hasLocation = true;
 		locationclient.setMockMode(true);	
 	}
 

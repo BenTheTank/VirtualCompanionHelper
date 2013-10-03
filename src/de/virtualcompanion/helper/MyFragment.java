@@ -6,6 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Keine Ahnung was ich hier reinschreiben soll.
+ * Ist halt ein Fragment auf das man sein eigenes Zeugs aufbauen kann ;)
+ * @author florianzorn
+ *
+ */
+
 public class MyFragment extends Fragment {
 	View myView = null;
 	

@@ -3,11 +3,18 @@ package de.virtualcompanion.helper;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.widget.ImageView;
 
-public class MasterActivity extends Activity {
+public class MasterActivity extends Activity implements Runnable {
 	ImageView videoFragment_imageView = null;
+	
+	// Handler fuer zeitverzoegertes senden
+	private Handler handler = new Handler();
+	private static final int INTERVALL = 5000; // Verzoegerung in ms
+	protected Data data; // Datencontainer
+	protected LocationMisc locationMisc;
 	
 	
 	@Override
@@ -43,5 +50,35 @@ public class MasterActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.master, menu);
 		return true;
+	}
+	
+	@Override
+	public void onResume()	{
+		super.onResume();
+		
+		if(locationMisc == null)
+			locationMisc = new LocationMisc(this.getApplicationContext());
+		
+		if(!locationMisc.locationclient.isConnected())
+			locationMisc.locationclient.connect();
+		
+		if(data == null)
+			data = new Data();
+		
+		handler.postDelayed(this,INTERVALL); // startet handler (run())!
+	}
+	
+	@Override
+	public void run() {
+		// Methode fuer den Handler laeuft alle INTERVALL ms
+
+		if(locationMisc.hasLocation) {
+			data.setLocation(locationMisc.location); // Should be done once ? 		
+			data.getData();
+			locationMisc.locationclient.setMockLocation(data.getLocation());
+		}
+		
+		//if (data.isStatus())
+			handler.postDelayed(this,INTERVALL); // startet nach INTERVALL wieder den handler (Endlosschleife)
 	}
 }

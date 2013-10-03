@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 public class VideoFragment extends Fragment {
 	ImageView imageView = null;
+	private static final String TERRY = "http://i1.kym-cdn.com/photos/images/original/000/281/681/c4b.jpg";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{

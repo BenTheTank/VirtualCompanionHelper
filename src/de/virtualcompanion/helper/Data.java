@@ -80,6 +80,10 @@ public class Data {
 		return status;
 	}
 	
+		public String getName()	{
+		return name;
+	}
+	
 	public String getPicpath() {
 		return (domain + pic_path + pic);
 	}

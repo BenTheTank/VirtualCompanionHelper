@@ -9,5 +9,7 @@
     <string name="tab_map">Karte</string>
     <string name="tab_video">Video</string>
     <string name="tab_x">x</string>
+    
+    <string name="username"></string>
 
 </resources>

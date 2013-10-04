@@ -5,14 +5,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 public class MasterActivity extends Activity implements Runnable {
 	ImageView videoFragment_imageView = null;
+	MenuItem connectionLight;
 	
 	// Handler fuer zeitverzoegertes senden
 	private Handler handler = new Handler();
-	private static final int INTERVALL = 5000; // Verzoegerung in ms
+	private static final int INTERVALL = 2000; // Verzoegerung in ms
 	protected Data data; // Datencontainer
 	protected LocationMisc locationMisc;
 	private ActionBar actionBar;
@@ -47,9 +50,11 @@ public class MasterActivity extends Activity implements Runnable {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.master, menu);
-		return true;
+		// Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.master, menu);
+	    connectionLight = menu.getItem(0);
+	    return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -76,6 +81,16 @@ public class MasterActivity extends Activity implements Runnable {
 			data.setLocation(locationMisc.location); // Should be done once ? 		
 			data.getData();
 			locationMisc.locationclient.setMockLocation(data.getLocation());
+		}
+		
+		// change the name of the title so it matches the username you are helping right now
+		this.setTitle("Watching: " + data.getName());
+		
+		// change here the connection quality indicator in the action bar
+		if(data.isStatus())	{
+			connectionLight.setIcon(R.drawable.light_green);
+		} else	{
+			connectionLight.setIcon(R.drawable.light_red);
 		}
 		
 		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic()) {

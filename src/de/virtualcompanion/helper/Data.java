@@ -13,12 +13,15 @@ public class Data {
 	private String name; // Simpler Benutzername
 	private String ip = "0.0.0.0";
 	private String network_type; // Der Datenempfangstyp (GSM, GPRS, 3G, etc.. )
+	private String pic;
 	private boolean status; // Verbindung soll aktiv sein oder beendet
 	long timestamp;
 	LocationMisc locationMisc;
 	
 	// Server
-	private String httpurl = "http://virtuellerbegleiter.rothed.de/androidmessages.html"; // HTTP Server address
+	private String domain = "http://virtuellerbegleiter.rothed.de/";
+	private String get = "androidmessages.html";
+	private String pic_path = "pictures/";
 	private JSONObject rawData;
 	
 	/* Konstanten */	
@@ -27,6 +30,7 @@ public class Data {
 	private static final String TAG_NAME = "name";
 	private static final String TAG_IP = "ip";
 	private static final String TAG_NETWORK = "network";
+	private static final String TAG_PIC = "pic";
 	private static final String TAG_LOC = "location";
 	private static final String TAG_LOC_LONG = "long";
 	private static final String TAG_LOC_LAT = "lat";
@@ -40,7 +44,7 @@ public class Data {
 	}
 	
 	public void getData() {
-		new JSONParser(this).execute(httpurl);
+		new JSONParser(this).execute(domain + get);
 	}
 	
 	public void fillData(JSONObject rawData) {        
@@ -51,6 +55,7 @@ public class Data {
         	name = rawData.getString(TAG_NAME);
         	ip = rawData.getString(TAG_IP);
         	network_type = rawData.getString(TAG_NETWORK);
+        	pic = rawData.getString(TAG_PIC);
         	JSONObject rawLocation = rawData.getJSONObject(TAG_LOC);
         	location.setAccuracy((float) rawLocation.getDouble(TAG_LOC_ACC));
         	location.setAltitude(rawLocation.getDouble(TAG_LOC_ALT));
@@ -73,5 +78,13 @@ public class Data {
 	
 	public boolean isStatus()	{
 		return status;
+	}
+	
+	public String getPicpath() {
+		return (domain + pic_path + pic);
+	}
+	
+	public boolean isPic() {
+		return (pic == null ? false : true);
 	}
 }

@@ -15,14 +15,14 @@ public class MasterActivity extends Activity implements Runnable {
 	private static final int INTERVALL = 5000; // Verzoegerung in ms
 	protected Data data; // Datencontainer
 	protected LocationMisc locationMisc;
-	
+	private ActionBar actionBar;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_master);
 		
-	    final ActionBar actionBar = getActionBar();
+	    actionBar = getActionBar();
 	    
 	    // Specify that tabs should be displayed in the action bar.
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -77,6 +77,10 @@ public class MasterActivity extends Activity implements Runnable {
 			data.getData();
 			locationMisc.locationclient.setMockLocation(data.getLocation());
 		}
+		
+		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic()) {
+			new DownloadImageTask((ImageView) this.findViewById(R.id.imageView_videoFragment)).execute(data.getPicpath());
+		}			
 		
 		//if (data.isStatus())
 			handler.postDelayed(this,INTERVALL); // startet nach INTERVALL wieder den handler (Endlosschleife)

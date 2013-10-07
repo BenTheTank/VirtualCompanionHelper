@@ -188,9 +188,10 @@ containing a value of this type.
         public static final int light_green=0x7f02001e;
         public static final int light_red=0x7f02001f;
         public static final int light_yellow=0x7f020020;
-        public static final int phone_gray=0x7f020021;
-        public static final int phone_green=0x7f020022;
-        public static final int phone_red=0x7f020023;
+        public static final int phone_error=0x7f020021;
+        public static final int phone_gray=0x7f020022;
+        public static final int phone_green=0x7f020023;
+        public static final int phone_red=0x7f020024;
     }
     public static final class id {
         public static final int Adresse=0x7f060008;

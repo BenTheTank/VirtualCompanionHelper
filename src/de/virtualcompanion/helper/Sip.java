@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Sip extends BroadcastReceiver implements Runnable {
+	
 	private Handler handler = new Handler();
 	
 	// Sip Stuff
@@ -34,12 +35,11 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	private SipProfile localSipProfile = null;
 	public SipAudioCall audioCall = null;
 	
-	//private IncomingCallReceiver receiver = null;
-		
 	private int registrationAttemptCount = 0;
 	// Sip Stuff done
 	
 	private boolean sipRegistrated = false;
+	private boolean sipIsError = false;
 	private boolean inCall = false;
 	
 	Context context;
@@ -57,32 +57,15 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	}
 	
 	public void onDestroy()	{
+		sipRegistrated = false;
 		closeLocalProfile();
+		context.unregisterReceiver(this);
 	}
 	
 	private void checkPreferences()	{
-		  settings = PreferenceManager.getDefaultSharedPreferences(context);
-		  String username = settings.getString("namePref", "");
-		  String password = settings.getString("passPref", "");
-		  String domain = settings.getString("domainPref", "");
-		  /*
-		  switch(choice)	{
-		  case ACCOUNT:
-			  if(username.length() == 0 || domain.length() == 0 || password.length() == 0){
-				  Intent intent = new Intent(this, SipServiceHelperActivity.class);
-				  //intent.putExtra(EXTRA_MESSAGE, EXTRA_MESSAGE_PREFS);
-				  intent.putExtra(EXTRA_MESSAGE, EXTRA_PREFS);
-				  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				  startActivity(intent);
-			  }
-			  
-			  break;
-			  
-		  default:
-			  break;
-		  }
-		  */
-	  }
+		PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
+		settings = PreferenceManager.getDefaultSharedPreferences(context);
+  }
 	
 	/*
      * ****************************************
@@ -92,11 +75,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 
 	
 	private void initializeSip()	{
-		/*
-		// Specify an intent filter to receive calls
-		sepcifieIntentFilter();
-		*/
-		
 		// Specify an intent filter to receive calls
 		sepcifieIntentFilter();
 		
@@ -115,7 +93,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	
 	private void initializeManager()	{
 		if(mSipManager == null)	{
-			//mSipManager = SipManager.newInstance(getApplicationContext());
 			mSipManager = SipManager.newInstance(context);
 		}
 		
@@ -131,21 +108,11 @@ public class Sip extends BroadcastReceiver implements Runnable {
 			closeLocalProfile();
 		}
 		
-		//String domain = "bb-projects.de";
-		
 		// We read the username and password out of our preferences
 		// so we are able to log into the sip server
 		String username = settings.getString("namePref", "");
 		String password = settings.getString("passPref", "");
 		String domain = settings.getString("domainPref", "");
-		
-		/*
-		if(username.length() == 0 || domain.length() == 0 || password.length() == 0){
-			//TODO: not for the hardcoded 3 strings above, they are for testing purpose only.
-			//finished application should have an UI for setting up username, domain and password!
-			return;
-		}
-		*/
 		
 		try	{
 			registrationAttemptCount++;
@@ -166,18 +133,17 @@ public class Sip extends BroadcastReceiver implements Runnable {
 			
 			mSipManager.setRegistrationListener(localSipProfile.getUriString(), new SipRegistrationListener() {
                 public void onRegistering(String localProfileUri) {
-                	//Toast.makeText(context, "onReg", Toast.LENGTH_SHORT).show();
                 }
 
                 public void onRegistrationDone(String localProfileUri, long expiryTime) {
                     registrationAttemptCount = 0;
                     
                     sipRegistrated = true;
+                    sipIsError = false;
                 }
 
                 public void onRegistrationFailed(String localProfileUri, int errorCode,
                         String errorMessage) {
-                	//Toast.makeText(context, "onFail", Toast.LENGTH_SHORT).show();
                 	// If registration fails we will try it xxx times again
                 	if(registrationAttemptCount < 100)	{
                 		initializeManager();
@@ -185,6 +151,7 @@ public class Sip extends BroadcastReceiver implements Runnable {
                 	}
                 	
                 	sipRegistrated = false;
+                	sipIsError = true;
                 }
             });
 		} catch (ParseException e) {
@@ -229,9 +196,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 		//peerSipAddress = dialInput.getText().toString() +"@" + localSipProfile.getSipDomain();
 		String buddyName = settings.getString("nameBuddyPref", "1001");
 		peerSipAddress = buddyName +"@" + localSipProfile.getSipDomain();
-		
-		
-		//updateStatus(peerSipAddress);
 		
 		try	{
 			SipAudioCall.Listener listener = getSipAudioCallListener();
@@ -292,14 +256,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 				inCall = true;
 			}
 			
-			/*
-			@Override
-			public void onReadyToCall (SipAudioCall call)	{
-				//TODO: Maybe this method is called when the caller is hanging up before we answer
-				updateStatus("schlabba");
-			}
-			*/
-			
 			@Override
 			public void onCalling(SipAudioCall call){
 				inCall = true;
@@ -324,11 +280,7 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	}
 	
 	
-	public void incomingCall(Intent intent){
-		//SipProfile callerProfile = audioCall.getPeerProfile();
-		//String callerName = callerProfile.getUserName();
-		//String callerDomain = callerProfile.getSipDomain();
-		
+	public void incomingCall(Intent intent){		
 		try	{
 			SipAudioCall.Listener listener = getSipAudioCallListener();
 			audioCall = mSipManager.takeAudioCall(intent, listener);
@@ -342,34 +294,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 				return;
 			}
 		}
-		
-		//Intent intent = new Intent(callerContext, IncomingCallActivity.class);
-		/*
-		Intent i = new Intent(this, SipServiceHelperActivity.class);
-		i.putExtra(EXTRA_MESSAGE, EXTRA_CALL);
-		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(i);
-		*/
-		
-		/*
-		try	{
-			// This updates our TextView so we can see who is calling us
-			//updateStatus(audioCall);
-			
-			audioCall.answerCall(30);
-			audioCall.startAudio();
-			audioCall.setSpeakerMode(true);
-			//audioCall.toggleMute();
-			
-			
-			//callerContext.startActivity(intent);
-		} catch(Exception e)	{
-			if(audioCall != null)	{
-				audioCall.close();
-			}
-		}
-		*/
-		//answerCall();
 	}
 
 	
@@ -400,6 +324,10 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	
 	public boolean isInCall()	{
 		return inCall;
+	}
+	
+	public boolean isError(){
+		return sipIsError;
 	}
 
 	/**

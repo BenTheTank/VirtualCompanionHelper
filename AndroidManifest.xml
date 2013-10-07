@@ -40,8 +40,6 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo" >
         
-        <service android:name="de.virtualcompanion.helper.SipService" >
-        </service>
         <activity
             android:name="de.virtualcompanion.helper.MasterActivity"
             android:label="@string/app_name"

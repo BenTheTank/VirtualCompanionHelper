@@ -3,11 +3,9 @@ package de.virtualcompanion.helper;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,17 +19,21 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 
+import de.virtualcompanion.helper.SettingsFragment.PreferenceListener;
+
 public class MasterActivity extends Activity implements Runnable,
-								IncomingCallFragment.IncomingCallFragmentListener	{
-	private static final String TAG = "virtualCompanion";
-	private ImageView videoFragment_imageView = null;
+								IncomingCallFragment.IncomingCallFragmentListener,
+								PreferenceListener	{
+	//private static final String TAG = "virtualCompanion";
 	private MenuItem connectionLight;
 	private MenuItem followUser;
 	public MenuItem startStopCall;
+	public boolean optionsMenuCreated = false;
 	
 	// Handler fuer zeitverzoegertes senden
 	private Handler handler = new Handler();
 	private static final int INTERVALL = 2000; // Verzoegerung in ms
+	
 	protected Data data; // Datencontainer
 	protected LocationMisc locationMisc;
 	private ActionBar actionBar;
@@ -48,10 +50,9 @@ public class MasterActivity extends Activity implements Runnable,
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	
-	SharedPreferences settings = null;
-	protected Sip sip;
-	private boolean canMakeCall = false;
+	protected Sip sip = null;
 	private boolean isInCall = false;
+	private boolean startStopCallButtonReady = false;
 	
 	
 	/*
@@ -65,9 +66,8 @@ public class MasterActivity extends Activity implements Runnable,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_master);
-		
-	    actionBar = getActionBar();
+
+		actionBar = getActionBar();
 	    
 	    // Specify that tabs should be displayed in the action bar.
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -88,7 +88,7 @@ public class MasterActivity extends Activity implements Runnable,
 	    		actionBar.newTab()
 	    				.setText(getString(R.string.tab_settings))
 	    				.setTabListener(new TabListener<SettingsFragment>(this, "TAG", SettingsFragment.class)));
-	    startSip();
+	    //startSip();
 	}
 	
 	@Override
@@ -115,6 +115,12 @@ public class MasterActivity extends Activity implements Runnable,
 	}
 	
 	@Override
+	protected void onPause()	{
+		super.onPause();
+		startHandler = false;
+	}
+	
+	@Override
 	protected void onDestroy()	{
 		super.onDestroy();
 		sip.onDestroy();
@@ -130,6 +136,14 @@ public class MasterActivity extends Activity implements Runnable,
 	    startStopCall = menu.findItem(R.id.startStopCall);
 	    
 	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)	{
+		super.onPrepareOptionsMenu(menu);
+		optionsMenuCreated = true;
+		startSip();
+		return true;
 	}
 	
 	@Override
@@ -161,23 +175,25 @@ public class MasterActivity extends Activity implements Runnable,
 		// change the name of the title so it matches the username you are helping right now
 		this.setTitle("Watching: " + data.getName());
 		
-		// change here the connection quality indicator in the action bar
-		if(data.isStatus())	{
-			connectionLight.setIcon(R.drawable.light_green);
-		} else	{
-			connectionLight.setIcon(R.drawable.light_red);
+		if(optionsMenuCreated)	{
+			// change here the connection quality indicator in the action bar
+			if(data.isStatus())	{
+				connectionLight.setIcon(R.drawable.light_green);
+			} else	{
+				connectionLight.setIcon(R.drawable.light_red);
+			}
+			
+			// Update MapViews Camera only if FragmentMap is active and checkbox is checked
+			updateMapCamera();
+			
+			// Changing the make call icon
+			updateCallIcon();
 		}
 		
 		// download image from server only if the VideoFragment is active
 		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic()) {
 			new DownloadImageTask((ImageView) this.findViewById(R.id.imageView_videoFragment)).execute(data.getPicpath());
 		}			
-		
-		// Update MapViews Camera only if FragmentMap is active and checkbox is checked
-		updateMapCamera();
-		
-		// Changing the make call icon
-		updateCallIcon();
 		
 		//if (data.isStatus())
 		if(startHandler)
@@ -203,45 +219,52 @@ public class MasterActivity extends Activity implements Runnable,
 		}
 	}
 	
-	@Override
-	protected void onPause()	{
-		super.onPause();
-		startHandler = false;
-	}
-	
 	
 	/**
 	 * Some routines for sip
 	 */
 	
 	private void startSip()	{
-	    settings = PreferenceManager.getDefaultSharedPreferences(this);
 	    sip = new Sip(this);
 	}
 	
 	// Method for changing the call icon
-	private void updateCallIcon()	{
+	public void updateCallIcon()	{
 		if(sip.isSipRegistrated())	{
 			isInCall = sip.isInCall();
+			//canMakeCall = true;
 			if(isInCall)
 				startStopCall.setIcon(R.drawable.phone_red);
 			else
 				startStopCall.setIcon(R.drawable.phone_green);
-			canMakeCall = true;
-		}
-		else	{
+		} else if(sip.isError())	{
+			startStopCall.setIcon(R.drawable.phone_error);
+		} else	{
 			startStopCall.setIcon(R.drawable.phone_gray);
-			canMakeCall = false;
+			//canMakeCall = false;
 		}
+		
+		// enables the menu button
+		startStopCallButtonReady = true;
 	}
 	
 	// Behaviour selection for clicking the call button
 	private boolean callButtonBehaviour()	{
-		if(canMakeCall & !isInCall)	{
+		if(startStopCallButtonReady & sip.isSipRegistrated() & !isInCall)	{
     		sip.initiateAudioCall();
+    		
+    		// this makes it impossible to execute the associated method multiple times
+    		// at the same time by pressing multiple times at the icon before it
+    		// changed its appearance
+    		startStopCallButtonReady = false;
     		return true;
-    	} else if(canMakeCall & isInCall)	{
+    	} else if(startStopCallButtonReady & sip.isSipRegistrated() & isInCall)	{
     		sip.endAudioCall();
+    		
+    		// this makes it impossible to execute the associated method multiple times
+    		// at the same time by pressing multiple times at the icon before it
+    		// changed its appearance
+    		startStopCallButtonReady = false;
     		return true;
     	} else
     		return true;
@@ -260,5 +283,17 @@ public class MasterActivity extends Activity implements Runnable,
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
 		sip.endAudioCall();
+	}
+
+	/**
+	 * Method of PreferenceChanged-Listener
+	 */
+	@Override
+	public void onPreferenceChanged() {
+		if(sip != null)	{
+			sip.onDestroy();
+			sip = null;
+			sip = new Sip(this);
+		}
 	}
 }

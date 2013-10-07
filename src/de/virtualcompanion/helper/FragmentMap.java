@@ -10,7 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 
-public class FragmentMap extends Fragment {
+public class FragmentMap extends Fragment	{
 	
 	GoogleMap googlemap;
 	GoogleMapOptions googlemapoptions;
@@ -18,6 +18,7 @@ public class FragmentMap extends Fragment {
 	MapView mapView;
 	
 	Bundle savedInstanceState;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{

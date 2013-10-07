@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
   
 	<com.google.android.gms.maps.MapView
 	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/mapView"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:id="@+id/mapView"
-	    android:keepScreenOn="true"
-	    android:apiKey="AIzaSyDfZ4PLnEG4_bOsJf_xlM_viD3LI5uqpsc" />
+	    android:apiKey="AIzaSyDfZ4PLnEG4_bOsJf_xlM_viD3LI5uqpsc"
+	    android:keepScreenOn="true" >
+
+	</com.google.android.gms.maps.MapView>
 
 </LinearLayout>

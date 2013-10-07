@@ -9,6 +9,19 @@
     <item 
         android:id="@+id/connection"
         android:icon="@drawable/light_red"
+        android:showAsAction="ifRoom"
+        android:title=""/>
+    
+    <item 
+        android:id="@+id/followUser"
+        android:title="@string/followUserMenuItem"
+        android:checkable="true"
+        android:checked="false"/>
+    
+    <item 
+        android:id="@+id/startStopCall"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_call"
         android:showAsAction="ifRoom"/>
 
 </menu>

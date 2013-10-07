@@ -35,7 +35,9 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
-        bmImage.refreshDrawableState();
+    	if(bmImage != null){
+    		bmImage.setImageBitmap(result);
+            bmImage.refreshDrawableState();
+    	}
     }
 }

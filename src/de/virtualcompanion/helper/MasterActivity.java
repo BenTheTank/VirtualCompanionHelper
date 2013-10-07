@@ -3,15 +3,10 @@ package de.virtualcompanion.helper;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +20,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
-
-import de.virtualcompanion.helper.SipService.SipBinder;
 
 public class MasterActivity extends Activity implements Runnable,
 								IncomingCallFragment.IncomingCallFragmentListener	{
@@ -56,30 +49,10 @@ public class MasterActivity extends Activity implements Runnable,
 	 */
 	
 	SharedPreferences settings = null;
-	protected SipService sipService = null;
-	private boolean sipBound = false;
+	protected Sip sip;
 	private boolean canMakeCall = false;
 	private boolean isInCall = false;
 	
-	
-	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
-	    // Called when the connection with the service is established
-	    public void onServiceConnected(ComponentName className, IBinder service) {
-	        // Because we have bound to an explicit
-	        // service that is running in our own process, we can
-	        // cast its IBinder to a concrete class and directly access it.
-	        SipBinder binder = (SipBinder) service;
-	        sipService = binder.getService();
-	        sipBound = true;
-	    }
-	    
-	 // Called when the connection with the service disconnects unexpectedly
-	    public void onServiceDisconnected(ComponentName className) {
-	        //Log.e(TAG, "onServiceDisconnected");
-	        sipBound = false;
-	    }
-	};
 	
 	/*
 	 * SIP variables DONE
@@ -121,8 +94,6 @@ public class MasterActivity extends Activity implements Runnable,
 	@Override
 	public void onStart()	{
 		super.onStart();
-		
-		bindSip();
 	}
 	
 	@Override
@@ -146,9 +117,7 @@ public class MasterActivity extends Activity implements Runnable,
 	@Override
 	protected void onDestroy()	{
 		super.onDestroy();
-		
-		// SIP
-		doUnbind();
+		sip.onDestroy();
 	}
 
 	@Override
@@ -174,8 +143,6 @@ public class MasterActivity extends Activity implements Runnable,
 	            return true;
 	        case R.id.startStopCall:
 	        	return callButtonBehaviour();
-	        case R.id.action_settings:
-	        	openIncomingCallDialog();
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -249,30 +216,13 @@ public class MasterActivity extends Activity implements Runnable,
 	
 	private void startSip()	{
 	    settings = PreferenceManager.getDefaultSharedPreferences(this);
-	    // Starting the Sip Service when we create the activity
-	 	Intent intent = new Intent(this, SipService.class);
-	 	startService(intent);
-	}
-	
-	// This binds our SipService to the Activity
-	private void bindSip()	{
-		Intent intent = new Intent(this, SipService.class);
-		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-	}
-	
-	// Unbinding the service from the activity
-	private void doUnbind()	{
-		if(sipBound == true){
-			// This call unbinds SipService from this acitivity
-			unbindService(mConnection);
-			sipBound = false;
-		}
+	    sip = new Sip(this);
 	}
 	
 	// Method for changing the call icon
 	private void updateCallIcon()	{
-		if(sipBound & sipService.isSipRegistrated())	{
-			isInCall = sipService.isInCall();
+		if(sip.isSipRegistrated())	{
+			isInCall = sip.isInCall();
 			if(isInCall)
 				startStopCall.setIcon(R.drawable.phone_red);
 			else
@@ -288,10 +238,10 @@ public class MasterActivity extends Activity implements Runnable,
 	// Behaviour selection for clicking the call button
 	private boolean callButtonBehaviour()	{
 		if(canMakeCall & !isInCall)	{
-    		sipService.initiateAudioCall();
+    		sip.initiateAudioCall();
     		return true;
     	} else if(canMakeCall & isInCall)	{
-    		sipService.endAudioCall();
+    		sip.endAudioCall();
     		return true;
     	} else
     		return true;
@@ -304,11 +254,11 @@ public class MasterActivity extends Activity implements Runnable,
 	
 	@Override
 	public void onDialogPositiveClick(DialogFragment dialog) {
-		sipService.answerCall();
+		sip.answerCall();
 	}
 
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
-		sipService.endAudioCall();
+		sip.endAudioCall();
 	}
 }

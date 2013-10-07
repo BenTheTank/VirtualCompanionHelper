@@ -21,7 +21,7 @@
     <item 
         android:id="@+id/startStopCall"
         android:title=""
-        android:icon="@android:drawable/ic_menu_call"
+        android:icon="@drawable/phone_gray"
         android:showAsAction="ifRoom"/>
 
 </menu>

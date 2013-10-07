@@ -58,7 +58,7 @@
             android:value="AIzaSyDfZ4PLnEG4_bOsJf_xlM_viD3LI5uqpsc"/>
         
         <receiver
-            android:name="de.virtualcompanion.helper.IncomingCallReceiver"
+            android:name="de.virtualcompanion.helper.Sip"
             android:label="Call Receiver" />
         
     </application>

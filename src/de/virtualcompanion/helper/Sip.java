@@ -2,7 +2,6 @@ package de.virtualcompanion.helper;
 
 import java.text.ParseException;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,22 +13,20 @@ import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.WindowManager;
-import android.widget.TextView;
 
-/*** Listens also for incoming SIP calls and intercepts
-*/
-
-class Sip extends BroadcastReceiver	{
+public class Sip extends BroadcastReceiver implements Runnable {
+	private Handler handler = new Handler();
+	
+	// Sip Stuff
 	private final static String TAG = "CLASS_SIP_VIRTUAL_COMPANION";
-	private final static String ACTION_STRING = "android.VirtualCompanion.INCOMING_CALL";
+	private final static String ACTION_STRING = "android.virtualcompanion.helper.INCOMING_CALL";
 	public final static int TIMEOUT = 30;
 	public static final String PREFS_NAME = "preferences";
 	
-	private Context callerContext = null;
-	private Activity callerActivity = null;
+	SharedPreferences settings = null;
 	
 	private String peerSipAddress = null;
 	
@@ -37,75 +34,89 @@ class Sip extends BroadcastReceiver	{
 	private SipProfile localSipProfile = null;
 	public SipAudioCall audioCall = null;
 	
+	//private IncomingCallReceiver receiver = null;
 		
-	private int registrationAttemptCount = 0;	
+	private int registrationAttemptCount = 0;
+	// Sip Stuff done
 	
+	private boolean sipRegistrated = false;
+	private boolean inCall = false;
 	
-	Sip(Context context)	{
-		callerContext = context;
-		callerActivity = (Activity) callerContext;
+	Context context;
+	
+	public Sip(Context context)	{
+    	this.context = context;
+		handler.post(this);
+	}
+	
+	@Override
+	public void run() {
+		// Checking the preferences if there is a username and password
+	    checkPreferences();
+	    initializeSip();
+	}
+	
+	public void onDestroy()	{
+		closeLocalProfile();
+	}
+	
+	private void checkPreferences()	{
+		  settings = PreferenceManager.getDefaultSharedPreferences(context);
+		  String username = settings.getString("namePref", "");
+		  String password = settings.getString("passPref", "");
+		  String domain = settings.getString("domainPref", "");
+		  /*
+		  switch(choice)	{
+		  case ACCOUNT:
+			  if(username.length() == 0 || domain.length() == 0 || password.length() == 0){
+				  Intent intent = new Intent(this, SipServiceHelperActivity.class);
+				  //intent.putExtra(EXTRA_MESSAGE, EXTRA_MESSAGE_PREFS);
+				  intent.putExtra(EXTRA_MESSAGE, EXTRA_PREFS);
+				  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				  startActivity(intent);
+			  }
+			  
+			  break;
+			  
+		  default:
+			  break;
+		  }
+		  */
+	  }
+	
+	/*
+     * ****************************************
+     * *			SIP-Framework 			  *
+     * ****************************************
+     */
+
+	
+	private void initializeSip()	{
+		/*
+		// Specify an intent filter to receive calls
+		sepcifieIntentFilter();
+		*/
 		
 		// Specify an intent filter to receive calls
 		sepcifieIntentFilter();
 		
-		
-		// Prevent the screen from turning off
-       callerActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-       
-       initializeManager();
+		initializeManager();
 	}
 	
 	/**
-	 * This method is part of the BroadcastReceiver functionality of Sip.class
+	 * Specifying an IntentFilter so we can receive calls
 	 */
-	
-	@Override
-	public void onReceive(Context context, Intent intent)	{
-		try	{
-			/*
-			SipAudioCall.Listener listener = new SipAudioCall.Listener()	{
-				@Override
-				public void onRinging(SipAudioCall call, SipProfile caller)	{
-					try	{
-						call.answerCall(TIMEOUT);
-					} catch(Exception e)	{
-						e.printStackTrace();
-					}
-				}
-			};
-			*/
-			SipAudioCall.Listener listener = getSipAudioCallListener();
-			
-			// this sets the takeAudioCall object of Sip.class to incomingCall object
-			audioCall = mSipManager.takeAudioCall(intent, listener);
-			incomingCall();	// Florian Zorn: further handling inside of MainActivity is possible!
-		} catch(Exception e)	{
-			if(audioCall != null)	{
-				audioCall.close();
-			}
-		}
+	public void sepcifieIntentFilter()	{
+		// Specify an intent filter to receive calls
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ACTION_STRING);
+		context.registerReceiver(this, filter);
 	}
 	
-	
-	public void close()	{
-		if(audioCall != null)	{
-			audioCall.close();
-		}
-		
-		closeLocalProfile();
-	}
-	
-	
-	/*
-	 * *************************
-	 * *       Framework       *
-	 * *************************
-	 */
-	
-	public void initializeManager()	{
+	private void initializeManager()	{
 		if(mSipManager == null)	{
 			//mSipManager = SipManager.newInstance(getApplicationContext());
-			mSipManager = SipManager.newInstance(callerContext);
+			mSipManager = SipManager.newInstance(context);
 		}
 		
 		initializeLocalProfile();
@@ -120,20 +131,21 @@ class Sip extends BroadcastReceiver	{
 			closeLocalProfile();
 		}
 		
-		String domain = "bb-projects.de";
+		//String domain = "bb-projects.de";
 		
 		// We read the username and password out of our preferences
 		// so we are able to log into the sip server
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callerActivity);
-		String username = settings.getString("pref_username", "");
-		String password = settings.getString("pref_password", "");
+		String username = settings.getString("namePref", "");
+		String password = settings.getString("passPref", "");
+		String domain = settings.getString("domainPref", "");
 		
-		
+		/*
 		if(username.length() == 0 || domain.length() == 0 || password.length() == 0){
 			//TODO: not for the hardcoded 3 strings above, they are for testing purpose only.
 			//finished application should have an UI for setting up username, domain and password!
 			return;
 		}
+		*/
 		
 		try	{
 			registrationAttemptCount++;
@@ -144,41 +156,43 @@ class Sip extends BroadcastReceiver	{
 			
 			Intent i = new Intent();
 			i.setAction(ACTION_STRING);
-			PendingIntent pi = PendingIntent.getBroadcast(callerContext, 0, i, Intent.FILL_IN_DATA);			
+			PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, Intent.FILL_IN_DATA);			
 			mSipManager.open(localSipProfile, pi, null);
 			
 			
 			// This listener must be added AFTER manager.open is called,
-           // Otherwise the methods aren't guaranteed to fire.
+            // Otherwise the methods aren't guaranteed to fire.
 			// -Google
 			
 			mSipManager.setRegistrationListener(localSipProfile.getUriString(), new SipRegistrationListener() {
-               public void onRegistering(String localProfileUri) {
-                   //updateStatus(callerContext.getString(R.string.sipStatusRegistering));
-               }
+                public void onRegistering(String localProfileUri) {
+                	//Toast.makeText(context, "onReg", Toast.LENGTH_SHORT).show();
+                }
 
-               public void onRegistrationDone(String localProfileUri, long expiryTime) {
-                   //updateStatus(callerContext.getString(R.string.sipStatusRegistrationDone));
-                   registrationAttemptCount = 0;
-               }
+                public void onRegistrationDone(String localProfileUri, long expiryTime) {
+                    registrationAttemptCount = 0;
+                    
+                    sipRegistrated = true;
+                }
 
-               public void onRegistrationFailed(String localProfileUri, int errorCode,
-                       String errorMessage) {
-               	// If registration fails we will try it xxx times again
-               	if(registrationAttemptCount < 100)	{
-               		updateStatus(String.valueOf(registrationAttemptCount) + " . try...");
-               		initializeManager();
-               	} else	{
-               		//updateStatus(callerContext.getString(R.string.sipStatusRegistrationFailed));
-               	}
-               }
-           });
+                public void onRegistrationFailed(String localProfileUri, int errorCode,
+                        String errorMessage) {
+                	//Toast.makeText(context, "onFail", Toast.LENGTH_SHORT).show();
+                	// If registration fails we will try it xxx times again
+                	if(registrationAttemptCount < 100)	{
+                		initializeManager();
+                	} else	{
+                	}
+                	
+                	sipRegistrated = false;
+                }
+            });
 		} catch (ParseException e) {
 			Log.d(TAG, "ParseException in method: sipProfileCreator()", e);
 		} catch (SipException e) {
-			updateStatus("Connection Error");
 		}
 	}
+	
 	
 	/**
 	 * Closes local SIP Profile, freeing associated objects into memory
@@ -197,22 +211,6 @@ class Sip extends BroadcastReceiver	{
 	}
 	
 	
-	/**
-	 * Specifying an IntentFilter so we can receive calls
-	 */
-	public void sepcifieIntentFilter()	{
-		// Specify an intent filter to receive calls
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(ACTION_STRING);
-		callerActivity.registerReceiver(this, filter);
-	}
-	
-	/*
-	 * ******************************
-	 * *       Framework Done       *
-	 * ******************************
-	 */
-	
 	
 	/*
 	 * *********************************
@@ -229,12 +227,11 @@ class Sip extends BroadcastReceiver	{
 		// Acquiring the typed in address to call
 		//EditText dialInput = (EditText) callerActivity.findViewById(R.id.dialInput);
 		//peerSipAddress = dialInput.getText().toString() +"@" + localSipProfile.getSipDomain();
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callerActivity);
-		String buddyName = settings.getString("pref_buddyName", "");
+		String buddyName = settings.getString("nameBuddyPref", "1001");
 		peerSipAddress = buddyName +"@" + localSipProfile.getSipDomain();
 		
 		
-		updateStatus(peerSipAddress);
+		//updateStatus(peerSipAddress);
 		
 		try	{
 			SipAudioCall.Listener listener = getSipAudioCallListener();
@@ -256,14 +253,26 @@ class Sip extends BroadcastReceiver	{
 		}
 	}
 	
+	
 	public void endAudioCall()	{
+		/*
 		if(audioCall.isInCall()){
 			try	{
 				audioCall.endCall();
+				audioCall.close();
 				audioCall = null;
 			} catch(SipException e)	{
 				//do something
 			}
+		}
+		*/
+		try	{
+			audioCall.endCall();
+			audioCall.close();
+			audioCall = null;
+			inCall = false;
+		} catch(SipException e)	{
+			//do something
 		}
 	}
 	
@@ -280,6 +289,7 @@ class Sip extends BroadcastReceiver	{
 			public void onCallEstablished(SipAudioCall call)	{
 				call.startAudio();
 				call.setSpeakerMode(true);
+				inCall = true;
 			}
 			
 			/*
@@ -291,43 +301,66 @@ class Sip extends BroadcastReceiver	{
 			*/
 			
 			@Override
-			public void onCallEnded(SipAudioCall call){
-				updateStatus("Ready");
-				audioCall = null;
+			public void onCalling(SipAudioCall call){
+				inCall = true;
 			}
 			
 			@Override
+			public void onCallEnded(SipAudioCall call){
+				//updateStatus("Ready");
+				call = null;
+				inCall = false;
+			}
+			
+			// here you can setup whatever happens when somebody is calling you
+			// like playing ringtone...
+			@Override
 			public void onRinging(SipAudioCall call, SipProfile caller)	{
-				try	{
-					call.answerCall(TIMEOUT);
-				} catch(Exception e)	{
-					e.printStackTrace();
-				}
+				super.onRinging(call, caller);
+				answerCall();
 			}
 		};
 		return sipAudioCallListener;
 	}
 	
 	
-	/**
-	 * This method is called by IncomingCallReceiver class
-	 * Here we handle what's happening if someone's calling us
-	 */
-	public void incomingCall(){
+	public void incomingCall(Intent intent){
 		//SipProfile callerProfile = audioCall.getPeerProfile();
 		//String callerName = callerProfile.getUserName();
 		//String callerDomain = callerProfile.getSipDomain();
 		
-		//Intent intent = new Intent(callerContext, IncomingCallActivity.class);
+		try	{
+			SipAudioCall.Listener listener = getSipAudioCallListener();
+			audioCall = mSipManager.takeAudioCall(intent, listener);
+			
+			// Due to the shitty implementation of SIP I have to call the callback method onRinging()
+			// myself <.<
+			listener.onRinging(audioCall, audioCall.getPeerProfile());
+		} catch(Exception e)	{
+			if(audioCall != null)	{
+				audioCall.close();
+				return;
+			}
+		}
 		
+		//Intent intent = new Intent(callerContext, IncomingCallActivity.class);
+		/*
+		Intent i = new Intent(this, SipServiceHelperActivity.class);
+		i.putExtra(EXTRA_MESSAGE, EXTRA_CALL);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(i);
+		*/
+		
+		/*
 		try	{
 			// This updates our TextView so we can see who is calling us
-			updateStatus(audioCall);
-			/*
+			//updateStatus(audioCall);
+			
 			audioCall.answerCall(30);
 			audioCall.startAudio();
 			audioCall.setSpeakerMode(true);
-			*/
+			//audioCall.toggleMute();
+			
 			
 			//callerContext.startActivity(intent);
 		} catch(Exception e)	{
@@ -335,6 +368,8 @@ class Sip extends BroadcastReceiver	{
 				audioCall.close();
 			}
 		}
+		*/
+		//answerCall();
 	}
 
 	
@@ -351,6 +386,7 @@ class Sip extends BroadcastReceiver	{
 	}
 	
 	
+	
 	/*
 	 * *********************************
 	 * *       		DONE			   *
@@ -358,34 +394,26 @@ class Sip extends BroadcastReceiver	{
 	 * *********************************
 	 */
 	
-	/*
-	 * *********************************
-	 * *		Miscellaneous		   *
-	 * *********************************
+	public boolean isSipRegistrated()	{
+		return sipRegistrated;
+	}
+	
+	public boolean isInCall()	{
+		return inCall;
+	}
+
+	/**
+	 * BroadcastReceiver
 	 */
-	
-	
-	public void updateStatus(final String status)	{
-		/*
-		callerActivity.runOnUiThread(new Runnable()	{
-			public void run()	{
-				TextView statusView = (TextView) callerActivity.findViewById(R.id.connectionStatusView);
-				statusView.setText(status);
-			}
-		});
-		*/
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		try {
+			this.audioCall = this.mSipManager.takeAudioCall(intent, getSipAudioCallListener());
+			((MasterActivity) context).openIncomingCallDialog();
+		} catch (SipException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public void updateStatus(final SipAudioCall call)	{
-		/*
-		SipProfile peerProfile = call.getPeerProfile();
-		final String callerUserName = peerProfile.getUserName() + "@" + peerProfile.getSipDomain();
-		callerActivity.runOnUiThread(new Runnable()	{
-			public void run()	{
-				TextView statusView = (TextView) callerActivity.findViewById(R.id.connectionStatusView);
-				statusView.setText(callerUserName);
-			}
-		});
-		*/
-	}
+
 }

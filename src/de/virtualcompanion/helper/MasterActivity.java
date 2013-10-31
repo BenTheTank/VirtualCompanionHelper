@@ -3,12 +3,16 @@ package de.virtualcompanion.helper;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -192,7 +196,16 @@ public class MasterActivity extends Activity implements Runnable,
 		
 		// download image from server only if the VideoFragment is active
 		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic()) {
-			new DownloadImageTask((ImageView) this.findViewById(R.id.imageView_videoFragment)).execute(data.getPicpath());
+			try	{
+				byte[] decodedString = Base64.decode(data.getPic(), 0);
+				lastPicture = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+				ImageView imageView = (ImageView) this.findViewById(R.id.imageView_videoFragment);
+				imageView.setImageBitmap(lastPicture);
+				imageView.setRotation(90);
+			} catch(IllegalArgumentException e)	{
+				// nothing
+				//Log.i("IllegalArgumentException", "Base64");
+			}
 		}			
 		
 		//if (data.isStatus())

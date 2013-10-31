@@ -84,8 +84,8 @@ public class Data {
 		return name;
 	}
 	
-	public String getPicpath() {
-		return (domain + pic_path + pic);
+	public String getPic() {
+		return (pic);
 	}
 	
 	public boolean isPic() {

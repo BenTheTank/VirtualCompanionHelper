@@ -179,35 +179,36 @@ containing a value of this type.
         public static final int common_signin_btn_text_normal_light=0x7f020015;
         public static final int common_signin_btn_text_pressed_dark=0x7f020016;
         public static final int common_signin_btn_text_pressed_light=0x7f020017;
-        public static final int ic_plusone_medium_off_client=0x7f020018;
-        public static final int ic_plusone_small_off_client=0x7f020019;
-        public static final int ic_plusone_standard_off_client=0x7f02001a;
-        public static final int ic_plusone_tall_off_client=0x7f02001b;
-        public static final int icon=0x7f02001c;
-        public static final int icon_greyscale=0x7f02001d;
-        public static final int light_green=0x7f02001e;
-        public static final int light_red=0x7f02001f;
-        public static final int light_yellow=0x7f020020;
-        public static final int phone_error=0x7f020021;
-        public static final int phone_gray=0x7f020022;
-        public static final int phone_green=0x7f020023;
-        public static final int phone_red=0x7f020024;
+        public static final int ic_media_pause=0x7f020018;
+        public static final int ic_plusone_medium_off_client=0x7f020019;
+        public static final int ic_plusone_small_off_client=0x7f02001a;
+        public static final int ic_plusone_standard_off_client=0x7f02001b;
+        public static final int ic_plusone_tall_off_client=0x7f02001c;
+        public static final int icon=0x7f02001d;
+        public static final int icon_greyscale=0x7f02001e;
+        public static final int light_green=0x7f02001f;
+        public static final int light_red=0x7f020020;
+        public static final int light_yellow=0x7f020021;
+        public static final int phone_error=0x7f020022;
+        public static final int phone_gray=0x7f020023;
+        public static final int phone_green=0x7f020024;
+        public static final int phone_red=0x7f020025;
     }
     public static final class id {
         public static final int Adresse=0x7f060008;
-        public static final int action_settings=0x7f06000b;
+        public static final int action_settings=0x7f06000c;
         public static final int button1=0x7f060006;
         public static final int button2=0x7f060007;
-        public static final int connection=0x7f06000c;
-        public static final int followUser=0x7f06000d;
+        public static final int connection=0x7f06000d;
+        public static final int followUser=0x7f06000e;
         public static final int hybrid=0x7f060004;
-        public static final int imageView_videoFragment=0x7f06000a;
+        public static final int imageView_videoFragment=0x7f06000b;
         public static final int map=0x7f060005;
         public static final int mapView=0x7f060009;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
         public static final int satellite=0x7f060002;
-        public static final int startStopCall=0x7f06000e;
+        public static final int startStopCall=0x7f06000f;
         public static final int terrain=0x7f060003;
     }
     public static final class layout {

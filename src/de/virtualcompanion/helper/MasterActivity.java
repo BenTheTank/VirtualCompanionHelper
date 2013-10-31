@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -262,6 +263,7 @@ public class MasterActivity extends Activity implements Runnable,
 	private boolean callButtonBehaviour()	{
 		if(startStopCallButtonReady & sip.isSipRegistrated() & !isInCall)	{
     		sip.initiateAudioCall();
+    		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
     		
     		// this makes it impossible to execute the associated method multiple times
     		// at the same time by pressing multiple times at the icon before it
@@ -270,6 +272,7 @@ public class MasterActivity extends Activity implements Runnable,
     		return true;
     	} else if(startStopCallButtonReady & sip.isSipRegistrated() & isInCall)	{
     		sip.endAudioCall();
+    		this.setVolumeControlStream(AudioManager.STREAM_RING);
     		
     		// this makes it impossible to execute the associated method multiple times
     		// at the same time by pressing multiple times at the icon before it
@@ -288,6 +291,7 @@ public class MasterActivity extends Activity implements Runnable,
 	@Override
 	public void onDialogPositiveClick(DialogFragment dialog) {
 		sip.answerCall();
+		this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 	}
 
 	@Override

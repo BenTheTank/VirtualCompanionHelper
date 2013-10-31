@@ -39,7 +39,7 @@ public class MasterActivity extends Activity implements Runnable,
 	
 	// Handler fuer zeitverzoegertes senden
 	private Handler handler = new Handler();
-	private static final int INTERVALL = 2000; // Verzoegerung in ms
+	private static final int INTERVALL = 50; // Verzoegerung in ms
 	
 	protected Data data; // Datencontainer
 	protected LocationMisc locationMisc;

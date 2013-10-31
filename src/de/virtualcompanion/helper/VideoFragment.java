@@ -12,7 +12,7 @@ public class VideoFragment extends Fragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{
-		super.onCreate(savedInstanceState);		
+		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
@@ -24,8 +24,16 @@ public class VideoFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)	{
 		imageView = (ImageView) view.findViewById(R.id.imageView_videoFragment);	//getView().findViewById(int) would work as well, only findViewById(int) alone wouldn't work (works only inside an activities sibling)
+		imageView.setOnClickListener((MasterActivity) this.getActivity());
 		
-		// setting an image to be displayed as long as there has no image been loaded from the server
-		imageView.setImageResource(R.drawable.icon);
+		// check whether video is paused or not
+		if(((MasterActivity) getActivity()).getPauseVideo())	{
+			((ImageView) getActivity().findViewById(R.id.imageView_videoPauseIndicator)).setVisibility(View.VISIBLE);
+			imageView.setImageBitmap(((MasterActivity) getActivity()).getLastPicture());
+			imageView.setRotation(90);
+		} else	{
+			// setting an image to be displayed as long as there has no image been loaded from the server
+			imageView.setImageResource(R.drawable.icon);
+		}
 	}
 }

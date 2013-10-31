@@ -9,11 +9,13 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -28,8 +30,8 @@ import de.virtualcompanion.helper.SettingsFragment.PreferenceListener;
 
 public class MasterActivity extends Activity implements Runnable,
 								IncomingCallFragment.IncomingCallFragmentListener,
-								PreferenceListener	{
-	//private static final String TAG = "virtualCompanion";
+								PreferenceListener,
+								OnClickListener	{
 	private MenuItem connectionLight;
 	private MenuItem followUser;
 	public MenuItem startStopCall;
@@ -48,6 +50,9 @@ public class MasterActivity extends Activity implements Runnable,
 	// for autofollowing function of the map fragment
 	private static float zoomLevel = 14;
 	
+	// bool for pausing the video
+	private boolean pauseVideo = false;
+	private Bitmap lastPicture = null;
 	
 	/*
 	 * SIP
@@ -195,7 +200,7 @@ public class MasterActivity extends Activity implements Runnable,
 		}
 		
 		// download image from server only if the VideoFragment is active
-		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic()) {
+		if((actionBar.getSelectedNavigationIndex() == 0) & data.isPic() & !pauseVideo) {
 			try	{
 				byte[] decodedString = Base64.decode(data.getPic(), 0);
 				lastPicture = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -205,6 +210,8 @@ public class MasterActivity extends Activity implements Runnable,
 			} catch(IllegalArgumentException e)	{
 				// nothing
 				//Log.i("IllegalArgumentException", "Base64");
+			} catch(NullPointerException e)	{
+				// nothing
 			}
 		}			
 		
@@ -309,5 +316,25 @@ public class MasterActivity extends Activity implements Runnable,
 			sip = null;
 			sip = new Sip(this);
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(pauseVideo)
+			((ImageView) findViewById(R.id.imageView_videoPauseIndicator)).setVisibility(View.GONE);
+		else
+			((ImageView) findViewById(R.id.imageView_videoPauseIndicator)).setVisibility(View.VISIBLE);
+		pauseVideo = !pauseVideo;
+		Vibrator vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+		if(vibrator.hasVibrator())	
+			vibrator.vibrate(50);
+	}
+	
+	protected boolean getPauseVideo()	{
+		return pauseVideo;
+		}
+	
+	protected Bitmap getLastPicture()	{
+		return lastPicture;
 	}
 }

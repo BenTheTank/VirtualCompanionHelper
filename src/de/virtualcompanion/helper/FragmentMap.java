@@ -46,9 +46,7 @@ public class FragmentMap extends Fragment	{
 		googlemap = mapView.getMap();
 		
 		googlemap.setMyLocationEnabled(true);
-		//googlemap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		
-		// I like the normal map more than that hybrid crap ;) @florianzorn
 		googlemap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	}
 	

@@ -35,19 +35,16 @@ public class LocationMisc implements LocationListener, ConnectionCallbacks,
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

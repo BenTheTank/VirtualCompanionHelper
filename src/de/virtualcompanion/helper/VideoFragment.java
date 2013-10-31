@@ -28,21 +28,4 @@ public class VideoFragment extends Fragment {
 		// setting an image to be displayed as long as there has no image been loaded from the server
 		imageView.setImageResource(R.drawable.icon);
 	}
-	
-	/*
-	 * Method for changing the image in the ImageView of VideoFragment Fragment
-	 * for example when a new picture has been loaded from the server...
-	 */
-	public void changeImage(String url){
-	//	new DownloadImageTask(imageView).execute(url);
-	}
-
-	/*
-	@Override
-	protected void onPause()	{
-		//TODO
-	}
-	*/
-	
-	
 }

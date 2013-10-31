@@ -21,7 +21,6 @@ public class Data {
 	// Server
 	private String domain = "http://virtuellerbegleiter.rothed.de/";
 	private String get = "androidmessages.html";
-	private String pic_path = "pictures/";
 	private JSONObject rawData;
 	
 	/* Konstanten */	

@@ -92,7 +92,6 @@ public class MasterActivity extends Activity implements Runnable,
 	    		actionBar.newTab()
 	    				.setText(getString(R.string.tab_settings))
 	    				.setTabListener(new TabListener<SettingsFragment>(this, "TAG", SettingsFragment.class)));
-	    //startSip();
 	}
 	
 	@Override
@@ -208,9 +207,10 @@ public class MasterActivity extends Activity implements Runnable,
 			}
 		}			
 		
-		//if (data.isStatus())
 		if(startHandler)
 			handler.postDelayed(this,INTERVALL); // startet nach INTERVALL wieder den handler (Endlosschleife)
+		
+		// TODO: vor dem Setzen auf Änderung prüfen
 	}
 	
 	// Update MapViews Camera only if FragmentMap is active and checkbox is checked
@@ -223,7 +223,6 @@ public class MasterActivity extends Activity implements Runnable,
 				Location location = googlemap.getMyLocation();
 				if(location != null)	{
 					LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-					//CameraUpdate camUp = CameraUpdateFactory.newLatLng(latLng);
 					CameraUpdate camUp = CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel);
 					googlemap.animateCamera(camUp);
 				}
@@ -245,7 +244,6 @@ public class MasterActivity extends Activity implements Runnable,
 	public void updateCallIcon()	{
 		if(sip.isSipRegistrated())	{
 			isInCall = sip.isInCall();
-			//canMakeCall = true;
 			if(isInCall)
 				startStopCall.setIcon(R.drawable.phone_red);
 			else
@@ -254,7 +252,6 @@ public class MasterActivity extends Activity implements Runnable,
 			startStopCall.setIcon(R.drawable.phone_error);
 		} else	{
 			startStopCall.setIcon(R.drawable.phone_gray);
-			//canMakeCall = false;
 		}
 		
 		// enables the menu button

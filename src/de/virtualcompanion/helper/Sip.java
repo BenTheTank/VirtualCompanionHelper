@@ -192,8 +192,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	
 	public void initiateAudioCall()	{
 		// Acquiring the typed in address to call
-		//EditText dialInput = (EditText) callerActivity.findViewById(R.id.dialInput);
-		//peerSipAddress = dialInput.getText().toString() +"@" + localSipProfile.getSipDomain();
 		String buddyName = settings.getString("nameBuddyPref", "1001");
 		peerSipAddress = buddyName +"@" + localSipProfile.getSipDomain();
 		
@@ -219,17 +217,6 @@ public class Sip extends BroadcastReceiver implements Runnable {
 	
 	
 	public void endAudioCall()	{
-		/*
-		if(audioCall.isInCall()){
-			try	{
-				audioCall.endCall();
-				audioCall.close();
-				audioCall = null;
-			} catch(SipException e)	{
-				//do something
-			}
-		}
-		*/
 		try	{
 			audioCall.endCall();
 			audioCall.close();
@@ -286,7 +273,7 @@ public class Sip extends BroadcastReceiver implements Runnable {
 			audioCall = mSipManager.takeAudioCall(intent, listener);
 			
 			// Due to the shitty implementation of SIP I have to call the callback method onRinging()
-			// myself <.<
+			// myself <.< 
 			listener.onRinging(audioCall, audioCall.getPeerProfile());
 		} catch(Exception e)	{
 			if(audioCall != null)	{

@@ -180,19 +180,15 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_dark=0x7f020016;
         public static final int common_signin_btn_text_pressed_light=0x7f020017;
         public static final int ic_media_pause=0x7f020018;
-        public static final int ic_plusone_medium_off_client=0x7f020019;
-        public static final int ic_plusone_small_off_client=0x7f02001a;
-        public static final int ic_plusone_standard_off_client=0x7f02001b;
-        public static final int ic_plusone_tall_off_client=0x7f02001c;
-        public static final int icon=0x7f02001d;
-        public static final int icon_greyscale=0x7f02001e;
-        public static final int light_green=0x7f02001f;
-        public static final int light_red=0x7f020020;
-        public static final int light_yellow=0x7f020021;
-        public static final int phone_error=0x7f020022;
-        public static final int phone_gray=0x7f020023;
-        public static final int phone_green=0x7f020024;
-        public static final int phone_red=0x7f020025;
+        public static final int icon=0x7f020019;
+        public static final int icon_greyscale=0x7f02001a;
+        public static final int light_green=0x7f02001b;
+        public static final int light_red=0x7f02001c;
+        public static final int light_yellow=0x7f02001d;
+        public static final int phone_error=0x7f02001e;
+        public static final int phone_gray=0x7f02001f;
+        public static final int phone_green=0x7f020020;
+        public static final int phone_red=0x7f020021;
     }
     public static final class id {
         public static final int Adresse=0x7f060008;
@@ -203,6 +199,7 @@ containing a value of this type.
         public static final int followUser=0x7f06000e;
         public static final int hybrid=0x7f060004;
         public static final int imageView_videoFragment=0x7f06000b;
+        public static final int imageView_videoPauseIndicator=0x7f06000a;
         public static final int map=0x7f060005;
         public static final int mapView=0x7f060009;
         public static final int none=0x7f060000;
@@ -215,38 +212,37 @@ containing a value of this type.
         public static final int activity_master=0x7f030000;
         public static final int map_fragment=0x7f030001;
         public static final int map_fragment_layout=0x7f030002;
-        public static final int my_fragment=0x7f030003;
-        public static final int video_fragment=0x7f030004;
+        public static final int video_fragment=0x7f030003;
     }
     public static final class menu {
         public static final int master=0x7f0a0000;
     }
     public static final class string {
-        public static final int action_settings=0x7f07001a;
-        public static final int app_name=0x7f070019;
+        public static final int action_settings=0x7f070016;
+        public static final int app_name=0x7f070015;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_enabling_title=0x7f070014;
+        public static final int auth_client_needs_enabling_title=0x7f070010;
         /**   Title for notification shown when GooglePlayServices needs to be
         installed for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_installation_title=0x7f070015;
+        public static final int auth_client_needs_installation_title=0x7f070011;
         /**   Title for notification shown when GooglePlayServices needs to be
         udpated for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_update_title=0x7f070016;
+        public static final int auth_client_needs_update_title=0x7f070012;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int auth_client_play_services_err_notification_msg=0x7f070017;
+        public static final int auth_client_play_services_err_notification_msg=0x7f070013;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int auth_client_requested_by_msg=0x7f070018;
+        public static final int auth_client_requested_by_msg=0x7f070014;
         /**   Title for notification shown when a bad version of GooglePlayServices
         has been installed and needs correction for an application to work.
         [CHAR LIMIT=70] 
          */
-        public static final int auth_client_using_bad_version_title=0x7f070013;
+        public static final int auth_client_using_bad_version_title=0x7f07000f;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -275,31 +271,19 @@ containing a value of this type.
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_install_title=0x7f070000;
-        /**  Message in confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=NONE] 
-         */
-        public static final int common_google_play_services_invalid_account_text=0x7f07000c;
-        /**  Title of confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=40] 
-         */
-        public static final int common_google_play_services_invalid_account_title=0x7f07000b;
-        /**  Message in confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=NONE] 
-         */
-        public static final int common_google_play_services_network_error_text=0x7f07000a;
-        /**  Title of confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=40] 
-         */
-        public static final int common_google_play_services_network_error_title=0x7f070009;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f07000d;
+        public static final int common_google_play_services_unknown_issue=0x7f070009;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_text=0x7f07000f;
+        public static final int common_google_play_services_unsupported_text=0x7f07000b;
         /**  Title of confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_unsupported_title=0x7f07000e;
+        public static final int common_google_play_services_unsupported_title=0x7f07000a;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f070010;
+        public static final int common_google_play_services_update_button=0x7f07000c;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
@@ -310,20 +294,20 @@ containing a value of this type.
         public static final int common_google_play_services_update_title=0x7f070007;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f070011;
+        public static final int common_signin_button_text=0x7f07000d;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f070012;
-        public static final int followUserMenuItem=0x7f070021;
-        public static final int hello_world=0x7f07001b;
-        public static final int incomingCallDialogTitle=0x7f070022;
+        public static final int common_signin_button_text_long=0x7f07000e;
+        public static final int followUserMenuItem=0x7f07001d;
+        public static final int hello_world=0x7f070017;
+        public static final int incomingCallDialogTitle=0x7f07001e;
         /**  Strings for Layout reason 
          */
-        public static final int tab_map=0x7f07001c;
-        public static final int tab_settings=0x7f07001f;
-        public static final int tab_video=0x7f07001d;
-        public static final int tab_x=0x7f07001e;
-        public static final int username=0x7f070020;
+        public static final int tab_map=0x7f070018;
+        public static final int tab_settings=0x7f07001b;
+        public static final int tab_video=0x7f070019;
+        public static final int tab_x=0x7f07001a;
+        public static final int username=0x7f07001c;
     }
     public static final class style {
         /** 

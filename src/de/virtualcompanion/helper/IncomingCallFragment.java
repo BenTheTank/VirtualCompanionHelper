@@ -36,6 +36,7 @@ public class IncomingCallFragment extends DialogFragment {
         }
     }
 
+    // TODO: Vielleicht eigenes Layout mit ImageButtons
     
 	
 	@Override

@@ -16,6 +16,26 @@
  -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory
+        android:title="Video Einstellungen" >
+        
+        <ListPreference
+            android:name="Videoauflösung"
+            android:summary="Quality of the Videostream"
+            android:defaultValue="low"
+            android:title="Enter Quality"
+            android:entries="@array/res_names"
+            android:entryValues="@array/res_values"
+            android:key="resolution" />
+	<CheckBoxPreference
+            android:name="Beleuchtung"
+            android:summary="Enable the Flashlight"
+            android:defaultValue="false"
+            android:title="Enable Flashlight"
+            android:key="flashlight" />	
+
+	</PreferenceCategory>	
+        
     <PreferenceCategory
         android:title="Deine Einstellungen">
         

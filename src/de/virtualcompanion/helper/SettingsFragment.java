@@ -59,5 +59,9 @@ public class SettingsFragment extends PreferenceFragment
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		mListener.onPreferenceChanged();
+		
+		((MasterActivity) this.getActivity()).data.setResolution(sharedPreferences.getString(Data.TAG_RESOLUTION, "low"));
+		((MasterActivity) this.getActivity()).data.setFlashlight(sharedPreferences.getBoolean(Data.TAG_FLASHLIGHT, false));
+		((MasterActivity) this.getActivity()).data.sendData();		
 	}
 }

@@ -3,6 +3,8 @@ package de.virtualcompanion.helper;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -10,7 +12,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +44,7 @@ public class MasterActivity extends Activity implements Runnable,
 	// Handler fuer zeitverzoegertes senden
 	private Handler handler = new Handler();
 	private static final int INTERVALL = 50; // Verzoegerung in ms
+	private static final int LONG_INTERVALL = 2000; // Lange Verzoegerung in ms
 	
 	protected Data data; // Datencontainer
 	protected LocationMisc locationMisc;
@@ -83,7 +88,7 @@ public class MasterActivity extends Activity implements Runnable,
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 	
-	    // Add 3 tabs(Maps,Video,x, specifying the tab's text and TabListener
+	    // Add 3 tabs(Maps,Video,Settings, specifying the tab's text and TabListener
 	    actionBar.addTab(
 	    		actionBar.newTab()
 	    				.setText(getString(R.string.tab_video))
@@ -109,8 +114,6 @@ public class MasterActivity extends Activity implements Runnable,
 	public void onResume()	{
 		super.onResume();
 		
-		startHandler = true;
-		
 		if(locationMisc == null)
 			locationMisc = new LocationMisc(this.getApplicationContext());
 		
@@ -118,8 +121,19 @@ public class MasterActivity extends Activity implements Runnable,
 			locationMisc.locationclient.connect();
 		
 		if(data == null)
-			data = new Data();
+			data = new Data(this);
 		
+		// einmalig Einstellungen anfordern und setzen
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+	 	Editor editor = p.edit();
+		editor.putBoolean(Data.TAG_FLASHLIGHT, false);
+	 	editor.commit();
+	 	
+		data.setResolution(p.getString(Data.TAG_RESOLUTION, "low"));
+		data.setFlashlight(false);
+		data.sendData();
+		
+		startHandler = true;
 		handler.postDelayed(this,INTERVALL); // startet handler (run())!
 	}
 	
@@ -215,9 +229,12 @@ public class MasterActivity extends Activity implements Runnable,
 			}
 		}			
 		
-		if(startHandler)
-			handler.postDelayed(this,INTERVALL); // startet nach INTERVALL wieder den handler (Endlosschleife)
-		
+		// startet nach INTERVALL wieder den handler (Endlosschleife)
+		if(startHandler & (actionBar.getSelectedNavigationIndex() == 2)) 
+			handler.postDelayed(this, LONG_INTERVALL);
+		else
+			handler.postDelayed(this, INTERVALL);
+
 		// TODO: vor dem Setzen auf Änderung prüfen
 	}
 	

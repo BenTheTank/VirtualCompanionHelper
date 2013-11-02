@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="res_names">
+        <item>"Hoch"</item>
+        <item>"Mittel"</item>
+        <item>"Niedrig"</item>
+    </string-array>
+
+	<string-array name="res_values">
+        <item>"high"</item>
+        <item>"medium"</item>
+        <item>"low"</item>
+    </string-array>
+    
+</resources>

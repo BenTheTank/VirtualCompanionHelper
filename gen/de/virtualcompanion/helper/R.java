@@ -159,64 +159,82 @@ containing a value of this type.
         public static final int activity_vertical_margin=0x7f090001;
     }
     public static final class drawable {
-        public static final int common_signin_btn_icon_dark=0x7f020000;
-        public static final int common_signin_btn_icon_disabled_dark=0x7f020001;
-        public static final int common_signin_btn_icon_disabled_focus_dark=0x7f020002;
-        public static final int common_signin_btn_icon_disabled_focus_light=0x7f020003;
-        public static final int common_signin_btn_icon_disabled_light=0x7f020004;
-        public static final int common_signin_btn_icon_focus_dark=0x7f020005;
-        public static final int common_signin_btn_icon_focus_light=0x7f020006;
-        public static final int common_signin_btn_icon_light=0x7f020007;
-        public static final int common_signin_btn_icon_normal_dark=0x7f020008;
-        public static final int common_signin_btn_icon_normal_light=0x7f020009;
-        public static final int common_signin_btn_icon_pressed_dark=0x7f02000a;
-        public static final int common_signin_btn_icon_pressed_light=0x7f02000b;
-        public static final int common_signin_btn_text_dark=0x7f02000c;
-        public static final int common_signin_btn_text_disabled_dark=0x7f02000d;
-        public static final int common_signin_btn_text_disabled_focus_dark=0x7f02000e;
-        public static final int common_signin_btn_text_disabled_focus_light=0x7f02000f;
-        public static final int common_signin_btn_text_disabled_light=0x7f020010;
-        public static final int common_signin_btn_text_focus_dark=0x7f020011;
-        public static final int common_signin_btn_text_focus_light=0x7f020012;
-        public static final int common_signin_btn_text_light=0x7f020013;
-        public static final int common_signin_btn_text_normal_dark=0x7f020014;
-        public static final int common_signin_btn_text_normal_light=0x7f020015;
-        public static final int common_signin_btn_text_pressed_dark=0x7f020016;
-        public static final int common_signin_btn_text_pressed_light=0x7f020017;
-        public static final int ic_media_pause=0x7f020018;
-        public static final int icon=0x7f020019;
-        public static final int icon_greyscale=0x7f02001a;
-        public static final int light_green=0x7f02001b;
-        public static final int light_red=0x7f02001c;
-        public static final int light_yellow=0x7f02001d;
-        public static final int phone_error=0x7f02001e;
-        public static final int phone_gray=0x7f02001f;
-        public static final int phone_green=0x7f020020;
-        public static final int phone_red=0x7f020021;
+        public static final int ben=0x7f020000;
+        public static final int common_signin_btn_icon_dark=0x7f020001;
+        public static final int common_signin_btn_icon_disabled_dark=0x7f020002;
+        public static final int common_signin_btn_icon_disabled_focus_dark=0x7f020003;
+        public static final int common_signin_btn_icon_disabled_focus_light=0x7f020004;
+        public static final int common_signin_btn_icon_disabled_light=0x7f020005;
+        public static final int common_signin_btn_icon_focus_dark=0x7f020006;
+        public static final int common_signin_btn_icon_focus_light=0x7f020007;
+        public static final int common_signin_btn_icon_light=0x7f020008;
+        public static final int common_signin_btn_icon_normal_dark=0x7f020009;
+        public static final int common_signin_btn_icon_normal_light=0x7f02000a;
+        public static final int common_signin_btn_icon_pressed_dark=0x7f02000b;
+        public static final int common_signin_btn_icon_pressed_light=0x7f02000c;
+        public static final int common_signin_btn_text_dark=0x7f02000d;
+        public static final int common_signin_btn_text_disabled_dark=0x7f02000e;
+        public static final int common_signin_btn_text_disabled_focus_dark=0x7f02000f;
+        public static final int common_signin_btn_text_disabled_focus_light=0x7f020010;
+        public static final int common_signin_btn_text_disabled_light=0x7f020011;
+        public static final int common_signin_btn_text_focus_dark=0x7f020012;
+        public static final int common_signin_btn_text_focus_light=0x7f020013;
+        public static final int common_signin_btn_text_light=0x7f020014;
+        public static final int common_signin_btn_text_normal_dark=0x7f020015;
+        public static final int common_signin_btn_text_normal_light=0x7f020016;
+        public static final int common_signin_btn_text_pressed_dark=0x7f020017;
+        public static final int common_signin_btn_text_pressed_light=0x7f020018;
+        public static final int flo=0x7f020019;
+        public static final int ic_media_pause=0x7f02001a;
+        public static final int icon=0x7f02001b;
+        public static final int icon_greyscale=0x7f02001c;
+        public static final int light_green=0x7f02001d;
+        public static final int light_red=0x7f02001e;
+        public static final int light_yellow=0x7f02001f;
+        public static final int markus=0x7f020020;
+        public static final int nils=0x7f020021;
+        public static final int phone_error=0x7f020022;
+        public static final int phone_gray=0x7f020023;
+        public static final int phone_green=0x7f020024;
+        public static final int phone_red=0x7f020025;
     }
     public static final class id {
-        public static final int Adresse=0x7f060008;
-        public static final int action_settings=0x7f06000c;
-        public static final int button1=0x7f060006;
-        public static final int button2=0x7f060007;
-        public static final int connection=0x7f06000d;
-        public static final int followUser=0x7f06000e;
+        public static final int Adresse=0x7f060014;
+        public static final int LinearLayout2=0x7f06000e;
+        public static final int ScrollViewCredits=0x7f060005;
+        public static final int button1=0x7f060012;
+        public static final int button2=0x7f060013;
+        public static final int connection=0x7f060018;
+        public static final int credits=0x7f06001a;
+        public static final int followUser=0x7f060019;
         public static final int hybrid=0x7f060004;
-        public static final int imageView_videoFragment=0x7f06000b;
-        public static final int imageView_videoPauseIndicator=0x7f06000a;
-        public static final int map=0x7f060005;
-        public static final int mapView=0x7f060009;
+        public static final int imageViewCredits_ben=0x7f060006;
+        public static final int imageViewCredits_flo=0x7f060007;
+        public static final int imageViewCredits_markus=0x7f060008;
+        public static final int imageViewCredits_nils=0x7f060009;
+        public static final int imageView_videoFragment=0x7f060016;
+        public static final int imageView_videoPauseIndicator=0x7f060017;
+        public static final int map=0x7f060011;
+        public static final int mapView=0x7f060015;
+        public static final int negativeButton=0x7f06000f;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
+        public static final int positiveButton=0x7f060010;
         public static final int satellite=0x7f060002;
-        public static final int startStopCall=0x7f06000f;
+        public static final int startStopCall=0x7f06001b;
         public static final int terrain=0x7f060003;
+        public static final int textViewCredits_ben=0x7f06000a;
+        public static final int textViewCredits_flo=0x7f06000b;
+        public static final int textViewCredits_markus=0x7f06000c;
+        public static final int textViewCredits_nils=0x7f06000d;
     }
     public static final class layout {
         public static final int activity_master=0x7f030000;
-        public static final int map_fragment=0x7f030001;
-        public static final int map_fragment_layout=0x7f030002;
-        public static final int video_fragment=0x7f030003;
+        public static final int credits_fragment=0x7f030001;
+        public static final int incoming_call_fragment=0x7f030002;
+        public static final int map_fragment=0x7f030003;
+        public static final int map_fragment_layout=0x7f030004;
+        public static final int video_fragment=0x7f030005;
     }
     public static final class menu {
         public static final int master=0x7f0b0000;
@@ -302,6 +320,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f07000e;
+        public static final int credits=0x7f070020;
         public static final int followUserMenuItem=0x7f07001d;
         public static final int hello_world=0x7f070017;
         public static final int incomingCallDialogTitle=0x7f07001e;
@@ -311,6 +330,7 @@ containing a value of this type.
         public static final int tab_settings=0x7f07001b;
         public static final int tab_video=0x7f070019;
         public static final int tab_x=0x7f07001a;
+        public static final int textViewIncomingCallFragment=0x7f07001f;
         public static final int username=0x7f07001c;
     }
     public static final class style {

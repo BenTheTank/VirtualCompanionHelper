@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class MasterActivity extends Activity implements Runnable,
 	// bool for pausing the video
 	private boolean pauseVideo = false;
 	private Bitmap lastPicture = null;
+	Matrix matrix = new Matrix();
 	
 	/*
 	 * SIP
@@ -103,6 +105,8 @@ public class MasterActivity extends Activity implements Runnable,
 	    		actionBar.newTab()
 	    				.setText(getString(R.string.tab_settings))
 	    				.setTabListener(new TabListener<SettingsFragment>(this, "TAG", SettingsFragment.class)));
+	    
+	    matrix.postRotate(90);
 	}
 	
 	@Override
@@ -180,6 +184,10 @@ public class MasterActivity extends Activity implements Runnable,
 	            return true;
 	        case R.id.startStopCall:
 	        	return callButtonBehaviour();
+	        case R.id.credits:
+	        	DialogFragment dialog = new CreditsFragment();
+	    		dialog.show(getFragmentManager(), "CreditsFragment");
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -219,8 +227,10 @@ public class MasterActivity extends Activity implements Runnable,
 				byte[] decodedString = Base64.decode(data.getPic(), 0);
 				lastPicture = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 				ImageView imageView = (ImageView) this.findViewById(R.id.imageView_videoFragment);
+				
+				lastPicture = Bitmap.createBitmap(lastPicture, 0, 0, lastPicture.getWidth(), lastPicture.getHeight(), matrix, true);
+				
 				imageView.setImageBitmap(lastPicture);
-				imageView.setRotation(90);
 			} catch(IllegalArgumentException e)	{
 				// nothing
 				//Log.i("IllegalArgumentException", "Base64");
@@ -243,6 +253,8 @@ public class MasterActivity extends Activity implements Runnable,
 		if((actionBar.getSelectedNavigationIndex() == 1) & (followUser.isChecked()))	{
 			try	{
 				GoogleMap googlemap = ((MapView) findViewById(R.id.mapView)).getMap();
+				if(googlemap == null)
+					return;
 				MapsInitializer.initialize(this);
 				
 				Location location = googlemap.getMyLocation();

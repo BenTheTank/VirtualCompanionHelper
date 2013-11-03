@@ -15,5 +15,8 @@
     <string name="followUserMenuItem">Auf Karte folgen</string>
     
     <string name="incomingCallDialogTitle">Eingehender Anruf</string>
+    <string name="textViewIncomingCallFragment">Möchten Sie den Anruf annehmen?</string>
+    
+    <string name="credits">Credits</string>
 
 </resources>

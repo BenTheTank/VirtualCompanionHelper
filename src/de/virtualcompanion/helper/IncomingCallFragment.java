@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class IncomingCallFragment extends DialogFragment {
 	AlertDialog dialog;
+	View view;
 	
 	/* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -36,33 +38,42 @@ public class IncomingCallFragment extends DialogFragment {
         }
     }
 
-    // TODO: Vielleicht eigenes Layout mit ImageButtons
-    
-	
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState)	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.incomingCallDialogTitle)
-			.setPositiveButton("Annehmen", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// Send the positive button event back to the host activity
-                    mListener.onDialogPositiveClick(IncomingCallFragment.this);
-				}
-			})
-			.setNegativeButton("Ablehnen", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// Send the negative button event back to the host activity
-                    mListener.onDialogNegativeClick(IncomingCallFragment.this);
-				}
-			});
+		view = getActivity().getLayoutInflater().inflate(R.layout.incoming_call_fragment, null);
+		builder.setView(view);
+		builder.setTitle(R.string.incomingCallDialogTitle);
 		dialog = builder.create();
 		dialog.setCancelable(false);
 		dialog.setCanceledOnTouchOutside(false);
 		this.setCancelable(false);
 		return dialog;
+	}
+	
+	@Override
+	public void onStart()	{
+		super.onStart();
+		
+		view.findViewById(R.id.positiveButton).setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// Send the positive button event back to the host activity
+                mListener.onDialogPositiveClick(IncomingCallFragment.this);
+                dialog.dismiss();
+			}
+			
+		});
+		view.findViewById(R.id.negativeButton).setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// Send the positive button event back to the host activity
+                mListener.onDialogNegativeClick(IncomingCallFragment.this);
+                dialog.dismiss();
+			}
+			
+		});
 	}
 }

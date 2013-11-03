@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollViewCredits"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="7" >
+
+        <ImageView
+            android:id="@+id/imageViewCredits_ben"
+            android:layout_margin="5dip"
+            android:layout_marginTop="10dip"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:src="@drawable/ben" />
+
+        <ImageView
+            android:id="@+id/imageViewCredits_flo"
+            android:layout_margin="5dip"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="1"
+            android:src="@drawable/flo" />
+
+        <ImageView
+            android:id="@+id/imageViewCredits_markus"
+            android:layout_margin="5dip"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="2"
+            android:src="@drawable/markus" />
+
+        <ImageView
+            android:id="@+id/imageViewCredits_nils"
+            android:layout_margin="5dip"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="3"
+            android:src="@drawable/nils" />
+        
+        <TextView
+            android:id="@+id/textViewCredits_ben"
+            android:layout_margin="5dip"
+            android:layout_marginTop="10dip"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:text="Benjamin Bärthlein"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewCredits_flo"
+            android:layout_margin="5dip"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="1"
+            android:text="Florian Zorn"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewCredits_markus"
+            android:layout_margin="5dip"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="2"
+            android:text="Markus Mattes"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewCredits_nils"
+            android:layout_margin="5dip"
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="3"
+            android:text="Nils Hofmann"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </GridLayout>
+
+</ScrollView>

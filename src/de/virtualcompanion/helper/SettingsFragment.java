@@ -58,7 +58,8 @@ public class SettingsFragment extends PreferenceFragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		mListener.onPreferenceChanged();
+		if(key.equals("namePref") || key.equals("domainPref") || key.equals("passPref"))
+			mListener.onPreferenceChanged();
 		
 		((MasterActivity) this.getActivity()).data.setResolution(sharedPreferences.getString(Data.TAG_RESOLUTION, "low"));
 		((MasterActivity) this.getActivity()).data.setFlashlight(sharedPreferences.getBoolean(Data.TAG_FLASHLIGHT, false));

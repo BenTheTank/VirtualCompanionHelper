@@ -84,7 +84,9 @@ public class Data {
         	location.setBearing((float) rawLocation.getDouble(TAG_LOC_BEAR));
         	location.setLatitude(rawLocation.getDouble(TAG_LOC_LAT));
         	location.setLongitude(rawLocation.getDouble(TAG_LOC_LONG));
-        	location.setElapsedRealtimeNanos(rawLocation.getLong(TAG_LOC_ET));
+        	// This should fix errors on < API 17 devices
+        	//location.setElapsedRealtimeNanos(rawLocation.getLong(TAG_LOC_ET));
+        	location.setTime(rawData.getLong(TAG_TIMESTAMP));
         } catch (JSONException e) {
             e.printStackTrace();
         }

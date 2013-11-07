@@ -84,9 +84,14 @@ public class Data {
         	location.setBearing((float) rawLocation.getDouble(TAG_LOC_BEAR));
         	location.setLatitude(rawLocation.getDouble(TAG_LOC_LAT));
         	location.setLongitude(rawLocation.getDouble(TAG_LOC_LONG));
-        	// This should fix errors on < API 17 devices
-        	//location.setElapsedRealtimeNanos(rawLocation.getLong(TAG_LOC_ET));
-        	location.setTime(rawData.getLong(TAG_TIMESTAMP));
+        	if (android.os.Build.VERSION.SDK_INT >= 17) {
+        		if(rawLocation.getLong(TAG_LOC_ET) == 0)
+        			location.setElapsedRealtimeNanos(android.os.SystemClock.elapsedRealtimeNanos());
+        		else
+        			location.setElapsedRealtimeNanos(rawLocation.getLong(TAG_LOC_ET));
+        	} else {
+        		location.setTime(rawData.getLong(TAG_TIMESTAMP));
+        	}
         } catch (JSONException e) {
             e.printStackTrace();
         }

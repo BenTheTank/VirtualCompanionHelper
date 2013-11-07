@@ -56,6 +56,10 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDfZ4PLnEG4_bOsJf_xlM_viD3LI5uqpsc"/>
         
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
         <receiver
             android:name="de.virtualcompanion.helper.Sip"
             android:label="Call Receiver" />

@@ -239,10 +239,11 @@ public class MasterActivity extends Activity implements Runnable,
 		}			
 		
 		// startet nach INTERVALL wieder den handler (Endlosschleife)
-		if(startHandler & (actionBar.getSelectedNavigationIndex() == 2)) 
+		if(startHandler && ((actionBar.getSelectedNavigationIndex() == 2) || !data.isStatus())) 
 			handler.postDelayed(this, LONG_INTERVALL);
-		else
+		else if (startHandler)
 			handler.postDelayed(this, INTERVALL);
+		// wenn nichts zutrifft, sprich startHander false ist wird die Schleife nicht fortgesetzt
 
 		// TODO: vor dem Setzen auf Änderung prüfen
 	}
